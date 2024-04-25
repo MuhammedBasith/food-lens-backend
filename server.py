@@ -58,7 +58,6 @@ def send_to_log_meal_api(image_path):
 
 @flask_app.route('/api/upload-image', methods=['POST'])
 def upload_image():
-
     if 'image' in request.files:
         image_file = request.files['image']
 
@@ -83,6 +82,39 @@ def upload_image():
         return jsonify(scanned_item), 200
     else:
         return 'No image provided', 400
+
+
+@flask_app.route('/api/add-to-diet', methods=['POST'])
+def add_to_diet():
+    try:
+        data = request.json
+
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+
+        meal_type = data.get('mealType')
+        nutrition_data = data.get('nutritionData')
+        timestamp = data.get('timestamp')
+
+        if not meal_type or not nutrition_data:
+            return jsonify({'error': 'Meal type or nutrition data missing'}), 400
+
+        if meal_type not in ['breakfast', 'lunch', 'dinner', 'other']:
+            return jsonify({'error': 'Invalid meal type'}), 400
+
+        # Construct meal log document
+        meal_log = {
+            'meal_type': meal_type,
+            'nutrition_data': nutrition_data,
+            'timestamp': timestamp
+        }
+
+        db.collection('DietLogs').add(meal_log)
+
+        return jsonify({'message': 'Meal added to diet logs successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
