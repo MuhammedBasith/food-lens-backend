@@ -117,5 +117,25 @@ def add_to_diet():
         return jsonify({'error': str(e)}), 500
 
 
+# This API is designed to retrieve data to display the complete history of scanned items.
+@flask_app.route('/api/get-scanned-items', methods=['GET'])
+def get_scanned_items():
+    try:
+        scanned_items_ref = db.collection('scanned_items')
+
+        scanned_items = scanned_items_ref.stream()
+
+        scanned_items_data = []
+
+        for item in scanned_items:
+            item_data = item.to_dict()
+            scanned_items_data.append(item_data)
+
+        return jsonify({'success': True, 'scanned_items': scanned_items_data}), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     flask_app.run(debug=True)
