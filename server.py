@@ -137,5 +137,24 @@ def get_scanned_items():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+@flask_app.route('/api/calendar/diet-logs', methods=['GET'])
+def get_diet_logs():
+    try:
+        diet_logs = db.collection('DietLogs')
+
+        items = diet_logs.stream()
+
+        diet_log_data = []
+
+        for item in items:
+            item_data = item.to_dict()
+            diet_log_data.append(item_data)
+
+        return jsonify({'success': True, 'scanned_items': diet_log_data}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     flask_app.run(debug=True)
