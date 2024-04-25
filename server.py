@@ -23,19 +23,21 @@ db = firestore.client()
 
 def preprocess_and_send_image(image_path):
     im = Image.open(image_path)
-    exif_dict = piexif.load(im.info["exif"])
-    exif_bytes = piexif.dump(exif_dict)
     rgb_im = im.convert('RGB')
-
-    width, height = rgb_im.size
-
-    size_mb = os.path.getsize(image_path) >> 20
-    while size_mb >= 1:
-        size = int(width * 0.75), int(height * 0.75)
-        resized_image = rgb_im.resize(size, Image.ANTIALIAS)
-        resized_image.save(image_path, 'JPEG', quality=95, exif=exif_bytes)
-        size_mb = os.path.getsize(image_path) >> 20
-
+    # print(im.info)
+    # exif_dict = piexif.load(im.info["exif"])
+    # exif_bytes = piexif.dump(exif_dict)
+    # rgb_im = im.convert('RGB')
+    #
+    # width, height = rgb_im.size
+    #
+    # size_mb = os.path.getsize(image_path) >> 20
+    # while size_mb >= 1:
+    #     size = int(width * 0.75), int(height * 0.75)
+    #     resized_image = rgb_im.resize(size, Image.ANTIALIAS)
+    #     resized_image.save(image_path, 'JPEG', quality=95, exif=exif_bytes)
+    #     size_mb = os.path.getsize(image_path) >> 20
+    rgb_im.save(image_path, quality=20, optimize=True)
     return image_path
 
 
@@ -46,6 +48,7 @@ def send_to_log_meal_api(image_path):
 
     url = 'https://api.logmeal.com/v2/image/segmentation/complete'
     resp = requests.post(url, files={'image': open(img, 'rb')}, headers=headers)
+    print(resp)
 
     # Nutritional information
     url = 'https://api.logmeal.com/v2/recipe/nutritionalInfo'
