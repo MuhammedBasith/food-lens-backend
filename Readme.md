@@ -38,8 +38,8 @@ Ensure the following environment variables are set:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/firebase-image-analysis.git
-   cd firebase-image-analysis
+   git clone https://github.com/MuhammedBasith/food-lens-backend.git
+   cd food-lens-backend
    ```
 
 2. Install dependencies:
