@@ -1,3 +1,35 @@
+"""
+Firebase Image Analysis and Diet Logging API
+
+Author: Basith
+Description: This Flask application provides an API for uploading and analyzing food images using Firebase
+             Firestore and LogMeal API. It also allows logging food items to a diet log collection.
+
+This script implements the following endpoints:
+- /api/upload-image: Uploads an image, preprocesses it, sends it to LogMeal API for analysis,
+                     and stores the nutritional data in Firebase.
+- /api/add-to-diet: Adds a meal with nutritional data to the diet log collection in Firestore.
+- /api/get-scanned-items: Retrieves scanned food items history from Firestore.
+- /api/calendar/diet-logs: Retrieves diet log items for a user calendar from Firestore.
+- /api/chatbot: Implements a simple chatbot using GenerativeAI to respond to user messages.
+
+Requirements:
+- Flask
+- firebase-admin
+- PIL (Pillow)
+- requests
+- google.generativeai (Google LLM Library)
+
+Environment Variables:
+- API_TOKEN: LogMeal API token
+- GEMINI_API_KEY: Gemini API key for GenerativeAI
+
+Usage:
+1. Run this script to start the Flask server.
+2. Use the provided API endpoints to interact with the application.
+
+"""
+
 from firebase_admin import credentials, firestore
 from flask import Flask, request, jsonify
 import google.generativeai as genai
