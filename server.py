@@ -32,6 +32,7 @@ Usage:
 
 from firebase_admin import credentials, firestore
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import google.generativeai as genai
 from dotenv import load_dotenv
 import firebase_admin
@@ -42,6 +43,7 @@ import os
 
 
 flask_app = Flask(__name__)
+CORS(flask_app)
 load_dotenv()
 
 api_token = os.getenv('API_TOKEN')
