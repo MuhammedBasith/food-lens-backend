@@ -1,19 +1,25 @@
-from flask import Flask, request, jsonify
-import firebase_admin
 from firebase_admin import credentials, firestore
-import datetime
-from PIL import Image
-import piexif
-import os
-import requests
+from flask import Flask, request, jsonify
+import google.generativeai as genai
 from dotenv import load_dotenv
+import firebase_admin
+from PIL import Image
+import datetime
+import requests
+import os
+
 
 flask_app = Flask(__name__)
 load_dotenv()
 
 api_token = os.getenv('API_TOKEN')
-if api_token is None:
+gemini_api_key = os.getenv('GEMINI_API_KEY')
+
+if api_token is None or gemini_api_key is None:
     raise ValueError("API_TOKEN environment variable is not set")
+
+
+genai.configure(api_key=gemini_api_key)
 
 # Initialize Firebase
 cred = credentials.Certificate("food-lens-firebase.json")
@@ -137,6 +143,7 @@ def get_scanned_items():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+# This API is designed to retrieve data to display the complete history of diet logged items for user calendar.
 @flask_app.route('/api/calendar/diet-logs', methods=['GET'])
 def get_diet_logs():
     try:
@@ -151,6 +158,20 @@ def get_diet_logs():
             diet_log_data.append(item_data)
 
         return jsonify({'success': True, 'scanned_items': diet_log_data}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@flask_app.route('/api/chatbot', methods=['POST'])
+def chatbot():
+    try:
+        user_message = request.json['message']
+
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(user_message)
+
+        return jsonify({'response': response.text}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
