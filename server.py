@@ -145,7 +145,7 @@ def add_to_diet():
 
         # Construct meal log document
         meal_log = {
-            'food_name': food_name
+            'food_name': food_name,
             'meal_type': meal_type,
             'nutrition_data': nutrition_data,
             'timestamp': timestamp
