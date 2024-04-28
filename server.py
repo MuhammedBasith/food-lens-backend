@@ -132,6 +132,7 @@ def add_to_diet():
         if not data:
             return jsonify({'error': 'No data provided'}), 400
 
+        food_name = data.get('food_name')
         meal_type = data.get('mealType')
         nutrition_data = data.get('nutritionData')
         timestamp = data.get('timestamp')
@@ -144,6 +145,7 @@ def add_to_diet():
 
         # Construct meal log document
         meal_log = {
+            'food_name': food_name
             'meal_type': meal_type,
             'nutrition_data': nutrition_data,
             'timestamp': timestamp
