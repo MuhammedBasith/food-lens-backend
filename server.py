@@ -92,7 +92,7 @@ def send_to_log_meal_api(image_path):
 
     # Nutritional information
     url = 'https://api.logmeal.com/v2/recipe/nutritionalInfo'
-    resp = requests.post(url, json={'imageId': resp.json()['imageId']}, headers=headers)
+    resp = requests.post(url, json={'imageId': resp.json()["imageId"]}, headers=headers)
     return resp.json()
 
 
